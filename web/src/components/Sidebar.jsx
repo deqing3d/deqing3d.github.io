@@ -1,67 +1,36 @@
-export default function Sidebar({
-  site,
-  modules,
-  progress,
-  activeId,
-  open,
-  onNavigate,
-  onClose,
-}) {
-  const percent = progress.total === 0 ? 0 : Math.round((progress.done / progress.total) * 100)
+import { NAV } from '../data/pages.js'
 
+const BASE = import.meta.env.BASE_URL
+
+export default function Sidebar({ pageId, open, onClose }) {
   return (
     <>
       {open && <div className="sidebar-backdrop" onClick={onClose} aria-hidden="true" />}
       <aside className={`sidebar${open ? ' is-open' : ''}`}>
         <div className="brand">
-          <div className="brand-title">
-            <span>🧊 {site.brand}</span>
-            <span className="brand-badge">{site.badge}</span>
-          </div>
-          <div className="brand-sub">{site.brandSub}</div>
-        </div>
-
-        <div className="progress-box">
-          <div className="progress-header">
-            <span>栏位掌握进度</span>
-            <span>
-              {progress.done} / {progress.total} ({percent}%)
-            </span>
-          </div>
-          <div className="progress-bar-bg">
-            <div className="progress-bar-fill" style={{ width: `${percent}%` }} />
-          </div>
+          <div className="brand-title">deqing3D</div>
+          <div className="brand-sub">3D 工作流笔记</div>
         </div>
 
         <ul className="nav-list">
-          {modules.map((mod, index) => (
-            <li className="nav-item" key={mod.id}>
+          {NAV.map((item, index) => (
+            <li className="nav-item" key={item.id}>
               <a
-                className={`nav-link${activeId === mod.id ? ' active' : ''}`}
-                href={`#${mod.id}`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  onNavigate(mod.id)
-                }}
+                className={`nav-link${pageId === item.id ? ' active' : ''}`}
+                href={`${BASE}${item.id}/`}
+                aria-current={pageId === item.id ? 'page' : undefined}
               >
                 <span className="nav-num">{String(index + 1).padStart(2, '0')}</span>
-                <span>{mod.title}</span>
-                <span className="nav-tag" data-tone={mod.tone}>
-                  {mod.tag}
-                </span>
+                <span>{item.label}</span>
               </a>
             </li>
           ))}
         </ul>
 
         <div className="sidebar-footer">
-          <div>🧱 全部内容为个人实践总结，持续补充</div>
-          <div>
-            📚 源码：
-            <a href="https://github.com/deqing3d/deqing3d.github.io" target="_blank" rel="noreferrer noopener">
-              仓库
-            </a>
-          </div>
+          <a href="https://github.com/deqing3d/deqing3d.github.io" target="_blank" rel="noreferrer noopener">
+            源码仓库
+          </a>
         </div>
       </aside>
     </>
