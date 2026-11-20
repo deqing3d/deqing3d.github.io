@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+*.log
+
+# 本地参考快照，不参与部署
+ai-game.html
