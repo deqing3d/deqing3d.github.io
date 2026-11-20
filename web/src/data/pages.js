@@ -11,9 +11,12 @@
  *   prompt —— 提示词/命令原样块
  */
 
+import { RIG_PAGE } from './rig.js'
+
 export const NAV = [
   { id: 'blender', label: 'Blender' },
   { id: 'ai-3d', label: 'AI-3D' },
+  { id: 'rig', label: '3D 人物骨骼' },
 ]
 
 const AI3D_SECTIONS = [
@@ -189,5 +192,14 @@ export const PAGES = {
     title: 'Blender',
     subtitle: 'Blender 相关流程记录，内容待补充。',
     sections: BLENDER_SECTIONS,
+  },
+  rig: {
+    id: 'rig',
+    kicker: '3D CHARACTER RIG',
+    title: '3D 人物骨骼',
+    subtitle:
+      'Mixamo、Rigify、ARP、Biped、MMD、CC4、DAZ、Unreal Mannequin、Unity Humanoid 等 15 种骨骼体系的分类、结构、兼容性与选型。',
+    intro: RIG_PAGE.intro,
+    sections: RIG_PAGE.sections,
   },
 }

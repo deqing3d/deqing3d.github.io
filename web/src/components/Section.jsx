@@ -1,41 +1,157 @@
-function linkLabel(item) {
-  if (item.label !== undefined) return item.label
-  return item.href.replace(/^https?:\/\//, '').replace(/\/$/, '')
+function Table({ head, rows }) {
+  return (
+    <div className="table-wrap">
+      <table className="doc-table">
+        <thead>
+          <tr>
+            {head.map((cell, i) => (
+              <th key={i}>{cell}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, ri) => (
+            <tr key={ri}>
+              {row.map((cell, ci) => (
+                <td key={ci}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
 }
 
-function Block({ block }) {
-  switch (block.type) {
-    case 'sub':
-      return <h3 className="block-sub">{block.title}</h3>
+export function Block({ block }) {
+  switch (block.t) {
+    case 'h2':
+      return <h2 className="blk-h2">{block.text}</h2>
 
-    case 'text':
-      return <p className="block-text">{block.text}</p>
+    case 'h3':
+      return <h3 className="blk-h3">{block.text}</h3>
 
-    case 'bullets':
+    case 'lead':
       return (
-        <ul className="block-bullets">
-          {block.items.map((item) => (
-            <li key={item}>{item}</li>
+        <div className="blk-lead">
+          <span className="lead-name">{block.name}</span>
+          <span className="lead-tag">{block.tag}</span>
+        </div>
+      )
+
+    case 'p':
+      return (
+        <p className="blk-p">
+          {block.text}
+          {block.meta !== undefined && <span className="blk-meta">{block.meta}</span>}
+        </p>
+      )
+
+    case 'note':
+      return <p className="blk-note">{block.text}</p>
+
+    case 'list':
+      return (
+        <ul className="blk-list">
+          {block.items.map((item, i) => (
+            <li key={i}>{item}</li>
           ))}
         </ul>
       )
 
-    case 'links':
+    case 'table':
+      return <Table head={block.head} rows={block.rows} />
+
+    case 'code':
+      return <pre className="blk-code">{block.text}</pre>
+
+    case 'link':
       return (
-        <ul className="block-links">
+        <p className="blk-link-line">
+          <a href={block.href} target="_blank" rel="noreferrer noopener">
+            {block.label}
+          </a>
+        </p>
+      )
+
+    case 'stack':
+      return (
+        <ol className="blk-stack">
           {block.items.map((item) => (
-            <li key={item.href + (item.note ?? '')}>
-              <a href={item.href} target="_blank" rel="noreferrer noopener" title={item.href}>
-                {linkLabel(item)}
-              </a>
-              {item.note !== undefined && <span className="link-note">{item.note}</span>}
+            <li key={item.title}>
+              <div className="stack-title">{item.title}</div>
+              <div className="stack-desc">{item.desc}</div>
+              <div className="stack-tools">{item.tools}</div>
             </li>
           ))}
-        </ul>
+        </ol>
       )
 
-    case 'prompt':
-      return <pre className="block-prompt">{block.text}</pre>
+    case 'roles':
+      return (
+        <div className="blk-roles">
+          {block.items.map((item) => (
+            <div className="role-card" key={item.name}>
+              <div className="role-name">{item.name}</div>
+              <div className="role-line">
+                <span className="role-k">推荐</span>
+                {item.rec}
+              </div>
+              <div className="role-line">
+                <span className="role-k">原因</span>
+                {item.why}
+              </div>
+            </div>
+          ))}
+        </div>
+      )
+
+    case 'steps':
+      return (
+        <ol className="blk-steps">
+          {block.items.map((step) => (
+            <li key={step.num}>
+              <div className="step-head">
+                <span className="step-num">Step {step.num}</span>
+                <span className="step-title">{step.title}</span>
+              </div>
+              {step.lines.map((line, i) =>
+                line.link !== undefined ? (
+                  <a
+                    className="step-link"
+                    key={i}
+                    href={line.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {line.link}
+                  </a>
+                ) : (
+                  <p className="step-text" key={i}>
+                    {line.text}
+                  </p>
+                ),
+              )}
+            </li>
+          ))}
+        </ol>
+      )
+
+    case 'plans':
+      return (
+        <div className="blk-plans">
+          {block.items.map((plan) => (
+            <div className="plan-card" key={plan.label}>
+              <div className="plan-head">
+                <span className="plan-label">{plan.label}</span>
+                <span className="plan-tag">{plan.tag}</span>
+              </div>
+              <div className="plan-sub">{plan.sub}</div>
+              <div className="plan-combo">{plan.combo}</div>
+            </div>
+          ))}
+        </div>
+      )
 
     default:
       return null

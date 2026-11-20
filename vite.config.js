@@ -19,6 +19,7 @@ export default defineConfig({
         index: r('web/index.html'),
         blender: r('web/blender/index.html'),
         'ai-3d': r('web/ai-3d/index.html'),
+        rig: r('web/rig/index.html'),
       },
     },
   },

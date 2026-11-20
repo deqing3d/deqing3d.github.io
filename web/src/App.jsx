@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Sidebar from './components/Sidebar.jsx'
-import Section from './components/Section.jsx'
+import Section, { Block } from './components/Section.jsx'
 import { PAGES } from './data/pages.js'
 
 export default function App({ pageId }) {
@@ -30,6 +30,16 @@ export default function App({ pageId }) {
           <h1 className="page-title">{page.title}</h1>
           <p className="page-subtitle">{page.subtitle}</p>
         </header>
+
+        {page.intro !== undefined && page.intro.length > 0 && (
+          <section className="doc-section doc-intro">
+            <div className="doc-body">
+              {page.intro.map((block, i) => (
+                <Block key={`intro-${i}`} block={block} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {page.sections.map((section) => (
           <Section key={section.id} section={section} />

@@ -36,3 +36,5 @@ export default function Sidebar({ pageId, open, onClose }) {
     </>
   )
 }
+
+export { NAV }
